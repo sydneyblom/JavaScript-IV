@@ -7,57 +7,43 @@ Prototype Refactor
 2. Your goal is to refactor all of this code to use ES6 Classes. The console.log() statements should still return what is expected of them.
 
 */
-
-
-function GameObject(attributes){
+  
+class GameObject {
+    constructor(attributes) {
     this.createdAt = attributes.createdAt;
     this.dimensions = attributes.dimensions;
-  }
-  
-  GameObject.prototype.destroy = function(){
+    this.name = attributes.name;
+    }
+    destroy() {
     return `${this.name} was removed from the game.`;
   }
-  
-  
-  /*
-    === CharacterStats ===
-    * healthPoints
-    * takeDamage() // prototype method -> returns the string '<object name> took damage.'
-    * should inherit destroy() from GameObject's prototype
-  */
-  
-  function CharacterStats(attributes){
-    GameObject.call(this, attributes);
-    this.healthPoints = attributes.healthPoints
-    this.name = attributes.name;
-  }
-  
-  CharacterStats.prototype = Object.create(GameObject.prototype);
-  CharacterStats.prototype.takeDamage = function (){
+}
+
+class CharacterStats extends GameObject {
+    constructor(attributes) {
+        super(attributes);
+        this.healthPoints = attributes.healthPoints;
+    }
+
+    takeDamage() {
     return `${this.name} took damage.`
-  }
-  /*
-    === Humanoid (Having an appearance or character resembling that of a human.) ===
-    * team
-    * weapons
-    * language
-    * greet() // prototype method -> returns the string '<object name> offers a greeting in <object language>.'
-    * should inherit destroy() from GameObject through CharacterStats
-    * should inherit takeDamage() from CharacterStats
-  */
-   
-  function Humanoid(attributes){   
-    CharacterStats.call(this, attributes);
-    this.team = attributes.team;
-    this.weapons = attributes.weapons;
-    this.language = attributes.language;
-  }
+     }
+
+}
   
-  Humanoid.prototype = Object.create(CharacterStats.prototype);
-  
-  Humanoid.prototype.greet = function(){
-    return `${this.name} offers a greeting in ${this.language}.`;
-  }
+class Humanoid extends CharacterStats {
+    constructor(attributes) {
+        super(attributes);
+        this.team = attributes.team;
+        this.weapons = attributes.weapons;
+        this.language = attributes.language;
+    }
+
+    greet() {
+        return `${this.name} offers a greeting in ${this.language}.`;
+    }
+}
+
   /*
     * Inheritance chain: GameObject -> CharacterStats -> Humanoid
     * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
